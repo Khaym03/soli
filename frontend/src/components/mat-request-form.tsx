@@ -17,6 +17,8 @@ import { Textarea } from './ui/textarea'
 import { Card } from './ui/card'
 import { ContactInfo } from './contact-info'
 import { RequestOptions } from './request-option'
+import { SendRequestPayload } from 'wailsjs/go/main/App'
+import { excel } from 'wailsjs/go/models'
 
 // type RequestRow = {
 //   quantity: number
@@ -96,8 +98,16 @@ export function MaterialsRequestForm() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values)
+
     form.reset()
+    const payload = excel.RequestFormPayload.createFrom(values)
+    payload.rowReq = values.reqRow.map(item => excel.RowRequest.createFrom(item))
+    payload.service = values.checkBoxes.includes('service')
+    payload.materials = values.checkBoxes.includes('materials')
+    payload.equipment = values.checkBoxes.includes('equipment')
+
+    console.log(payload)
+    SendRequestPayload(payload)
   }
 
   return (
@@ -108,8 +118,8 @@ export function MaterialsRequestForm() {
       >
         <div className="flex flex-col gap-8 grow">
           <Card className="flex gap-4 p-6 shadow-none">
-            <div className='flex flex-col gap-4 grow'>
-            <ContactInfo control={form.control} />
+            <div className="flex flex-col gap-4 grow">
+              <ContactInfo control={form.control} />
             </div>
 
             {/* opciones */}
