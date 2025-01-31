@@ -1,7 +1,9 @@
 package excel
 
 import (
+	"bufio"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/xuri/excelize/v2"
@@ -73,13 +75,46 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 	e.file.SetCellValue(sheetName, fmt.Sprintf("C%d", contetStartRow+5), "Justificación")
 	e.file.MergeCell(sheetName, fmt.Sprintf("C%d", contetStartRow+5), fmt.Sprintf("D%d", contetStartRow+5))
 
+	// Crear un estilo con ajuste de texto
+	style := excelize.Style{
+		Alignment: &excelize.Alignment{
+			Horizontal: "left",
+			Vertical:   "top",
+			WrapText:   true,
+		},
+	}
+	styleID, err := e.file.NewStyle(&style)
+	if err != nil {
+		fmt.Println("Error al crear estilo:", err)
+		return
+	}
+
+	justifyWidth := 40.00
+
 	// Escribir la fila de requerimientos
 	for i, req := range rfp.RowReq {
 		row := i + contetStartRow + 5 + 1
+
 		e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", row), req.Quantity)
 		e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), req.Description)
 		e.file.SetCellValue(sheetName, fmt.Sprintf("C%d", row), req.Justification)
-		e.file.MergeCell(sheetName, fmt.Sprintf("C%d", row), fmt.Sprintf("D%d", row))
+		// e.file.MergeCell(sheetName, fmt.Sprintf("C%d", row), fmt.Sprintf("D%d", row))
+		e.file.SetColWidth(sheetName, fmt.Sprintf("C%d", row), fmt.Sprintf("C%d", row), justifyWidth)
+
+		// Ajustar la altura de la fila en función del contenido
+		descriptionHeight := estimateRowHeight(req.Description)
+		justificationHeight := estimateRowHeight(req.Justification)
+		maxHeight := max(descriptionHeight, justificationHeight)
+
+		// Establecer la altura de la fila
+		if err := e.file.SetRowHeight(sheetName, row, maxHeight); err != nil {
+			fmt.Println(err)
+		}
+
+		if err := e.file.SetCellStyle(sheetName, fmt.Sprintf("A%d", row), fmt.Sprintf("C%d", row), styleID); err != nil {
+			fmt.Println(err)
+		}
+
 	}
 
 	// Guardar los cambios en el archivo existente
@@ -113,4 +148,26 @@ func (e *Excel) createHeaderStyle() int {
 	}
 
 	return style
+}
+
+// Función para estimar la altura de una fila basada en el contenido
+func estimateRowHeight(content string) float64 {
+	const baseHeight = 15.0 // Altura base en puntos
+	const lineHeight = 12.0 // Altura por línea en puntos
+
+	var lineCount int
+	scanner := bufio.NewScanner(strings.NewReader(content))
+	for scanner.Scan() {
+		lineCount++
+	}
+
+	return baseHeight + (lineHeight * float64(lineCount))
+}
+
+// Función para obtener el máximo entre dos valores
+func max(a, b float64) float64 {
+	if a > b {
+		return a
+	}
+	return b
 }
