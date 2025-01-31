@@ -26,16 +26,16 @@ import { RequestOptions } from './request-option'
 
 export const formSchema = z.object({
   to: z.string().min(3, {
-    message: 'Emitter must be at least 3 characters.'
+    message: 'Debe almenos ingresar 3 caracteres.'
   }),
   from: z.string().min(3, {
-    message: 'Description must be at least 10 characters.'
+    message: 'Debe almenos ingresar 3 caracteres.'
   }),
   service: z.boolean().default(false),
   materials: z.boolean().default(false),
   equipment: z.boolean().default(false),
   checkBoxes: z.array(z.string()).refine(value => value.some(item => item), {
-    message: 'You have to select at least one item.'
+    message: 'Debe seleccionar al menos un objeto.'
   }),
   reqRow: z
     .array(
@@ -107,8 +107,8 @@ export function MaterialsRequestForm() {
         className="flex flex-row gap-8 w-full max-w-screen-xl  overflow-hidden"
       >
         <div className="flex flex-col gap-8 grow">
-          <Card className="flex gap-4 p-6">
-            <div className='flex flex-col gap-4'>
+          <Card className="flex gap-4 p-6 shadow-none">
+            <div className='flex flex-col gap-4 grow'>
             <ContactInfo control={form.control} />
             </div>
 
@@ -120,7 +120,7 @@ export function MaterialsRequestForm() {
 
           <Card className="flex flex-col p-6 grow shadow-none">
             <div className="flex justify-between items-center border-b pb-4 mb-4">
-              <h3 className="text-lg font-semibold">Items</h3>
+              <h3 className="text-lg font-semibold">Objetos</h3>
               <Button
                 type="button"
                 variant="outline"
@@ -129,13 +129,13 @@ export function MaterialsRequestForm() {
                   append({ quantity: 1, description: '', justification: '' })
                 }
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Item
+                <Plus className="w-4 h-4 mr-1" />
+                Agregar Objeto
               </Button>
             </div>
 
             {/* array fields */}
-            <div className="h-[333px]  overflow-y-auto">
+            <div className="h-[333px]  overflow-y-auto px-1">
               {fields.map((field, index) => (
                 <div key={field.id} className="flex gap-4">
                   <FormField

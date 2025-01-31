@@ -24,7 +24,7 @@ export function RequestOptions({ control, checkboxes }: RequestOptionsProps) {
         Seleccione el tipo de solicitud que desea realizar.
       </FormDescription>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 mt-4">
         {checkboxes.map(item => (
           <FormField
             key={item.id}

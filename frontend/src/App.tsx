@@ -16,7 +16,7 @@ function App() {
   // }
 
   return (
-    <section className="flex justify-center items-center w-full py-10 min-h-screen overflow-x-hidden ">
+    <section className="flex justify-center items-center w-full py-10 min-h-screen overflow-x-hidden bg-muted/40">
       <MaterialsRequestForm />
     </section>
   )
