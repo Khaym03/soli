@@ -95,6 +95,8 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 	for i, req := range rfp.RowReq {
 		row := i + contetStartRow + 5 + 1
 
+		req.Purify()
+
 		e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", row), req.Quantity)
 		e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), req.Description)
 		e.file.SetCellValue(sheetName, fmt.Sprintf("C%d", row), req.Justification)

@@ -1,11 +1,19 @@
 package excel
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type RowRequest struct {
 	Quantity      int32  `json:"quantity"`
 	Description   string `json:"description"`
 	Justification string `json:"justification"`
+}
+
+func (r *RowRequest) Purify() {
+	r.Description = strings.TrimSpace(r.Description)
+	r.Justification = strings.TrimSpace(r.Justification)
 }
 
 type RequestFormPayload struct {
