@@ -25,7 +25,6 @@ import {
   maintenanceLogSchema,
   type MaintenanceLogFormValues
 } from '@/lib/schema-maintenance'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function MaintenanceForm() {
   const form = useForm<MaintenanceLogFormValues>({
@@ -70,10 +69,10 @@ export function MaintenanceForm() {
                 name="maintenance_number"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Maintenance Number</FormLabel>
+                    <FormLabel>No. Mantenimiento</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter maintenance number"
+                        placeholder="Ingrese el número de mantenimiento"
                         {...field}
                       />
                     </FormControl>
@@ -87,7 +86,7 @@ export function MaintenanceForm() {
                 name="date_of_maintenance"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date of Maintenance</FormLabel>
+                    <FormLabel>Fecha de Mantenimiento</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -101,7 +100,7 @@ export function MaintenanceForm() {
                             {field.value ? (
                               format(field.value, 'PPP')
                             ) : (
-                              <span>Pick a date</span>
+                              <span>Seleccione una fecha</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -112,9 +111,9 @@ export function MaintenanceForm() {
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={date =>
-                            date > new Date() || date < new Date('1900-01-01')
-                          }
+                          // disabled={date =>
+                          //   date > new Date() || date < new Date('1900-01-01')
+                          // }
                           initialFocus
                         />
                       </PopoverContent>
@@ -129,9 +128,9 @@ export function MaintenanceForm() {
                 name="emitter"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Emitter</FormLabel>
+                    <FormLabel>Emisor</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter emitter name" {...field} />
+                      <Input placeholder="Ingrese el nombre del emisor" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -143,9 +142,9 @@ export function MaintenanceForm() {
                 name="issuing_department"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Issuing Department</FormLabel>
+                    <FormLabel>Departamento de Emisión</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter department name" {...field} />
+                      <Input placeholder="Ingrese el nombre del departamento" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -157,9 +156,9 @@ export function MaintenanceForm() {
                 name="maintenance_technician"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Maintenance Technician</FormLabel>
+                    <FormLabel>Tecnico</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter technician name" {...field} />
+                      <Input placeholder="Ingrese el nombre del tecnico" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -173,10 +172,10 @@ export function MaintenanceForm() {
                 name="fault_description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fault Description</FormLabel>
+                    <FormLabel>Descripción del Fallo</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Describe the fault in detail"
+                        placeholder="Describe el fallo en detalle"
                         className="resize-none"
                         {...field}
                       />
@@ -191,10 +190,10 @@ export function MaintenanceForm() {
                 name="used_materials"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Used Materials</FormLabel>
+                    <FormLabel>Materiales Utilizados</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="List all materials used"
+                        placeholder="Lista de materiales utilizados"
                         className="resize-none"
                         {...field}
                       />
@@ -209,10 +208,10 @@ export function MaintenanceForm() {
                 name="result"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Result</FormLabel>
+                    <FormLabel>Resultado</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Additional observations (optional)"
+                        placeholder="Observaciones adicionales (opcional)"
                         className="resize-none"
                         {...field}
                       />
@@ -227,10 +226,10 @@ export function MaintenanceForm() {
                 name="observations"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Observations</FormLabel>
+                    <FormLabel>Observaciones</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Additional observations (optional)"
+                        placeholder="Observaciones adicionales (opcional)"
                         className="resize-none"
                         {...field}
                       />
@@ -251,7 +250,7 @@ export function MaintenanceForm() {
               {form.formState.isSubmitting && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Submit Maintenance Log
+              Enviar Registro de Mantenimiento
             </Button>
           </form>
         </Form>

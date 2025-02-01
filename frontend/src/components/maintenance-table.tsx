@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import { Search, Edit, Trash2 } from "lucide-react";
 import { MaintenanceLogFormValues } from "@/lib/schema-maintenance";
 import { maintenanceLogs } from "@/lib/data";
-import { Card } from "./ui/card";
 
 type MaintenanceLog = MaintenanceLogFormValues & { id: string };
 

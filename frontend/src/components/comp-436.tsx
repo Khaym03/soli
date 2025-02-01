@@ -3,8 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Box, ServerCog } from 'lucide-react'
 import { MaintenanceForm } from './maintenance-form'
 import { MaterialsRequestForm } from './mat-request-form'
-import { MaintenanceTable } from './maintenance-table'
+// import { MaintenanceTable } from './maintenance-table'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import DemoPage from './table-mtto'
 
 export default function RootLayout() {
   return (
@@ -45,17 +46,18 @@ export default function RootLayout() {
       </TabsContent>
       <TabsContent value="tab-2">
         <div className="h-full bg-muted/40 px-8">
-          <div className="grid grid-cols-1  gap-4">
-            <Card className="h-[calc(100vh-100px)] w-full mx-auto shadow-none">
+          <div className="grid grid-cols-1  gap-4 ">
+            <Card className="h-[calc(100vh-100px)] w-full mx-auto shadow-none overflow-y-auto">
               <CardHeader>
                 <CardTitle className="text-2xl font-bold text-center">
                  Registro de Mantenimiento
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 ">
                 <MaintenanceForm />
 
-                <MaintenanceTable />
+                {/* <MaintenanceTable /> */}
+                <DemoPage />
               </CardContent>
             </Card>
           </div>
