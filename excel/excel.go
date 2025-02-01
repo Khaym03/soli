@@ -19,6 +19,8 @@ const (
 	logoWidth   float64 = 30
 	titleWidth  float64 = 62
 	formatWidth float64 = 20
+
+	headerSizeInRows = 5
 )
 
 type Excel struct {
@@ -47,33 +49,40 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 	e.Load("test.xlsx")
 
 	defer e.file.Close()
-	e.buildHeader()
-
-	e.file.SetCellValue(sheetName, "A6", "Fecha:")
-	e.file.SetCellValue(sheetName, "B6", time.Now().Format("02/01/2006"))
 
 	// inicio del cuerpo de la solicitud
-	contetStartRow := 7
+	var contetStartRow int
 
-	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow), "Para:")
-	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+1), "De:")
+	if e.getLastRow(sheetName) == 0 {
+		e.buildHeader()
+		contetStartRow = headerSizeInRows + 1
+	} else {
+		contetStartRow = e.getLastRow(sheetName) + 1
+	}
 
-	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow), rfp.To)
-	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+1), rfp.From)
+	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+1), "Fecha:")
 
-	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+2), rfp.Service)
-	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+3), rfp.Materials)
-	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+4), rfp.Equipment)
+	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+1), time.Now().Format("02/01/2006"))
 
-	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+2), "Servicios")
-	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+3), "Materiales")
-	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+4), "Equipos")
+	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+2), "Para:")
+	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+3), "De:")
 
-	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+5), "Cant.")
-	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+5), "Descripción del material")
+	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+2), rfp.To)
+	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+3), rfp.From)
 
-	e.file.SetCellValue(sheetName, fmt.Sprintf("C%d", contetStartRow+5), "Justificación")
-	e.file.MergeCell(sheetName, fmt.Sprintf("C%d", contetStartRow+5), fmt.Sprintf("D%d", contetStartRow+5))
+	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+4), rfp.Service)
+	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+5), rfp.Materials)
+	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+6), rfp.Equipment)
+
+	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+4), "Servicios")
+	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+5), "Materiales")
+	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+6), "Equipos")
+
+	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+7), "Cant.")
+	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+7), "Descripción del material")
+
+	e.file.SetCellValue(sheetName, fmt.Sprintf("C%d", contetStartRow+7), "Justificación")
+	e.file.MergeCell(sheetName, fmt.Sprintf("C%d", contetStartRow+7), fmt.Sprintf("D%d", contetStartRow+7))
 
 	// Crear un estilo con ajuste de texto
 	style := excelize.Style{
@@ -91,7 +100,7 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 
 	// Escribir la fila de requerimientos
 	for i, req := range rfp.RowReq {
-		row := i + contetStartRow + 5 + 1
+		row := i + contetStartRow + 8
 
 		req.Purify()
 
@@ -162,6 +171,15 @@ func estimateRowHeight(content string) float64 {
 	}
 
 	return baseHeight + (lineHeight * float64(lineCount))
+}
+
+func (e *Excel) getLastRow(sheetName string) int {
+	rows, err := e.file.GetRows(sheetName)
+	if err != nil {
+		fmt.Println("Error al obtener filas:", err)
+		return 0
+	}
+	return len(rows)
 }
 
 // Función para obtener el máximo entre dos valores

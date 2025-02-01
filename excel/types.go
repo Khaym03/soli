@@ -3,6 +3,7 @@ package excel
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 type RowRequest struct {
@@ -23,6 +24,11 @@ type RequestFormPayload struct {
 	Materials bool         `json:"materials"`
 	Equipment bool         `json:"equipment"`
 	RowReq    []RowRequest `json:"rowReq"`
+}
+
+type Request struct {
+	RequestFormPayload
+	Date time.Time `json:"date"`
 }
 
 func (r *RequestFormPayload) String() string {
