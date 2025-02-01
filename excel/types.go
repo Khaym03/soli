@@ -42,3 +42,17 @@ type HeaderFormat struct {
 	FechaDeVersion    string `json:"fecha_de_version"`
 	DepndencyDivision string `json:"depdncia_division"`
 }
+
+type MaintenanceLog struct {
+	CreatedAt             time.Time `json:"created_at"`
+	UpdatedAt             time.Time `json:"updated_at"`
+	Emitter               string    `json:"emitter"`
+	FaultDescription      string    `json:"fault_description"`
+	IssuingDepartment     string    `json:"issuing_department"`
+	MaintenanceNumber     string    `json:"maintenance_number"`
+	DateOfMaintenance     time.Time `json:"date_of_maintenance"`
+	UsedMaterials         string    `json:"used_materials"`
+	MaintenanceTechnician string    `json:"maintenance_technician"`
+	Result                string    `json:"result"`
+	Observations          string    `json:"observations"`
+}
