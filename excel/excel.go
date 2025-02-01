@@ -89,8 +89,6 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 		return
 	}
 
-	justifyWidth := 40.00
-
 	// Escribir la fila de requerimientos
 	for i, req := range rfp.RowReq {
 		row := i + contetStartRow + 5 + 1
@@ -100,8 +98,8 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 		e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", row), req.Quantity)
 		e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), req.Description)
 		e.file.SetCellValue(sheetName, fmt.Sprintf("C%d", row), req.Justification)
-		// e.file.MergeCell(sheetName, fmt.Sprintf("C%d", row), fmt.Sprintf("D%d", row))
-		e.file.SetColWidth(sheetName, fmt.Sprintf("C%d", row), fmt.Sprintf("C%d", row), justifyWidth)
+		e.file.MergeCell(sheetName, fmt.Sprintf("C%d", row), fmt.Sprintf("D%d", row))
+		// e.file.SetColWidth(sheetName, fmt.Sprintf("C%d", row), fmt.Sprintf("C%d", row), justifyWidth)
 
 		// Ajustar la altura de la fila en función del contenido
 		descriptionHeight := estimateRowHeight(req.Description)

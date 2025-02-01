@@ -12,7 +12,7 @@ import {
 } from './ui/form'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import { Plus, Trash2 } from 'lucide-react'
+import { ListRestartIcon, Plus, SaveIcon, Trash2 } from 'lucide-react'
 import { Textarea } from './ui/textarea'
 import { Card } from './ui/card'
 import { ContactInfo } from './contact-info'
@@ -75,11 +75,6 @@ const checkboxes = [
 ]
 
 export function MaterialsRequestForm() {
-  // const [rows, setRows] = useState<RequestRow[]>([
-  //   { quantity: 1, description: '', justification: '' }
-  // ])
-
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -94,14 +89,15 @@ export function MaterialsRequestForm() {
     name: 'reqRow'
   })
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
 
     form.reset()
     const payload = excel.RequestFormPayload.createFrom(values)
-    payload.rowReq = values.reqRow.map(item => excel.RowRequest.createFrom(item))
+    payload.rowReq = values.reqRow.map(item =>
+      excel.RowRequest.createFrom(item)
+    )
     payload.service = values.checkBoxes.includes('service')
     payload.materials = values.checkBoxes.includes('materials')
     payload.equipment = values.checkBoxes.includes('equipment')
@@ -131,17 +127,34 @@ export function MaterialsRequestForm() {
           <Card className="flex flex-col p-6 grow shadow-none">
             <div className="flex justify-between items-center border-b pb-4 mb-4">
               <h3 className="text-lg font-semibold">Objetos</h3>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  append({ quantity: 1, description: '', justification: '' })
-                }
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Agregar Objeto
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    append({ quantity: 1, description: '', justification: '' })
+                  }
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Agregar Objeto
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => form.reset()}
+                  type="reset"
+                >
+                  <ListRestartIcon className="w-4 h-4 mr-1" />
+                  Reiniciar formulario
+                </Button>
+
+                <Button  size="sm" type="submit">
+                  <SaveIcon className="w-4 h-4 mr-1" />
+                  Guardar
+                </Button>
+              </div>
             </div>
 
             {/* array fields */}
@@ -218,19 +231,6 @@ export function MaterialsRequestForm() {
               </p>
             )}
           </Card>
-        </div>
-        <div className="flex flex-col gap-8">
-          <Button className=" aspect-square h-20" type="submit">
-            Guardar
-          </Button>
-          <Button
-            variant={'outline'}
-            className=" aspect-square h-20"
-            onClick={() => form.reset()}
-            type="reset"
-          >
-            Reset
-          </Button>
         </div>
       </form>
     </Form>
