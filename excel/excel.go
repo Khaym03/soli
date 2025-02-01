@@ -9,13 +9,9 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-var sheetName = "Hoja1"
+var sheetName = "Sheet1"
 
 const (
-	primeraColWidth int32 = 15
-	segundaColWidth int32 = 50
-	terceraColWidth int32 = 50
-
 	logoWidth   float64 = 30
 	titleWidth  float64 = 62
 	formatWidth float64 = 20
@@ -61,8 +57,14 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 	}
 
 	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+1), "Fecha:")
-
 	e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", contetStartRow+1), time.Now().Format("02/01/2006"))
+
+	e.file.SetCellStyle(
+		sheetName,
+		fmt.Sprintf("A%d", contetStartRow+1),
+		fmt.Sprintf("D%d", contetStartRow+1),
+		e.dateRowStyle(),
+	)
 
 	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+2), "Para:")
 	e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", contetStartRow+3), "De:")
@@ -84,25 +86,24 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 	e.file.SetCellValue(sheetName, fmt.Sprintf("C%d", contetStartRow+7), "Justificación")
 	e.file.MergeCell(sheetName, fmt.Sprintf("C%d", contetStartRow+7), fmt.Sprintf("D%d", contetStartRow+7))
 
-	// Crear un estilo con ajuste de texto
-	style := excelize.Style{
-		Alignment: &excelize.Alignment{
-			Horizontal: "left",
-			Vertical:   "top",
-			WrapText:   true,
-		},
-	}
-	styleID, err := e.file.NewStyle(&style)
-	if err != nil {
-		fmt.Println("Error al crear estilo:", err)
-		return
-	}
+	e.file.SetCellStyle(
+		sheetName,
+		fmt.Sprintf("A%d", contetStartRow+7),
+		fmt.Sprintf("D%d", contetStartRow+7),
+		e.reqItemsHeaderStyle(),
+	)
 
 	// Escribir la fila de requerimientos
 	for i, req := range rfp.RowReq {
 		row := i + contetStartRow + 8
 
 		req.Purify()
+
+		e.file.SetCellStyle(
+			sheetName,
+			fmt.Sprintf("A%d", row), fmt.Sprintf("D%d", row),
+			e.reqItemsRowStyle(),
+		)
 
 		e.file.SetCellValue(sheetName, fmt.Sprintf("A%d", row), req.Quantity)
 		e.file.SetCellValue(sheetName, fmt.Sprintf("B%d", row), req.Description)
@@ -120,9 +121,9 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 			fmt.Println(err)
 		}
 
-		if err := e.file.SetCellStyle(sheetName, fmt.Sprintf("A%d", row), fmt.Sprintf("C%d", row), styleID); err != nil {
-			fmt.Println(err)
-		}
+		// if err := e.file.SetCellStyle(sheetName, fmt.Sprintf("B%d", row), fmt.Sprintf("C%d", row), styleID); err != nil {
+		// 	fmt.Println(err)
+		// }
 
 	}
 
@@ -131,32 +132,6 @@ func (e *Excel) SaveRequest(rfp RequestFormPayload) {
 		fmt.Println(err)
 		return
 	}
-
-	return
-}
-
-func (e *Excel) createHeaderStyle() int {
-	style, err := e.file.NewStyle(&excelize.Style{
-		Font: &excelize.Font{
-			Bold:  true,
-			Size:  12,
-			Color: "#FFFFFF", // Color en formato RGB
-		},
-		Fill: excelize.Fill{
-			Type:    "pattern",
-			Color:   []string{"#4F81BD"},
-			Pattern: 1,
-		},
-		Alignment: &excelize.Alignment{
-			Horizontal: "center",
-		},
-	})
-	if err != nil {
-		fmt.Println("Error al crear el estilo:", err)
-		return 0
-	}
-
-	return style
 }
 
 // Función para estimar la altura de una fila basada en el contenido
@@ -180,6 +155,18 @@ func (e *Excel) getLastRow(sheetName string) int {
 		return 0
 	}
 	return len(rows)
+}
+
+func (e *Excel) File() *excelize.File {
+	return e.file
+}
+
+func (e *Excel) NewFile() {
+	e.file = excelize.NewFile()
+}
+
+func SetSheetName(name string) {
+	sheetName = name
 }
 
 // Función para obtener el máximo entre dos valores
