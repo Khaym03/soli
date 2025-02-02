@@ -13,6 +13,10 @@ export function GetMaintenanceLogs():Promise<Array<repository.MaintenanceLog>>;
 
 export function GetSerialValue():Promise<number>;
 
+export function OpenExcelFile():Promise<void>;
+
 export function SendRequestPayload(arg1:excel.RequestFormPayload):Promise<void>;
+
+export function SetCurrentSheetName(arg1:string):Promise<void>;
 
 export function Sheets():Promise<Array<string>>;

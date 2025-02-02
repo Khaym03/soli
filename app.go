@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"os/exec"
+
+	osruntime "runtime"
 
 	"github.com/khaym03/soli/excel"
 	"github.com/khaym03/soli/repository"
@@ -12,6 +15,7 @@ import (
 const (
 	// Aviable events
 	EventUpdateMaintenanceTable = "update_maintenance_table"
+	EventUpdateSheets           = "update_sheets"
 )
 
 // App struct
@@ -87,4 +91,25 @@ func (a *App) GetSerialValue() int64 {
 		return 0
 	}
 	return value
+}
+
+func (a *App) SetCurrentSheetName(name string) {
+	a.xlsx.SetCurrentSheetName(name)
+
+	runtime.EventsEmit(a.ctx, EventUpdateSheets)
+}
+
+func (a *App) OpenExcelFile() {
+	var cmd *exec.Cmd
+
+	if osruntime.GOOS == "windows" {
+		// En Windows, usa "start" para abrir el archivo
+		cmd = exec.Command("cmd", "/C", "start", "test.xlsx")
+	}
+
+	go func() {
+		if err := cmd.Run(); err != nil {
+			fmt.Println("Error al abrir el archivo:", err)
+		}
+	}()
 }

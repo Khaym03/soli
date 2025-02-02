@@ -22,8 +22,16 @@ export function GetSerialValue() {
   return window['go']['main']['App']['GetSerialValue']();
 }
 
+export function OpenExcelFile() {
+  return window['go']['main']['App']['OpenExcelFile']();
+}
+
 export function SendRequestPayload(arg1) {
   return window['go']['main']['App']['SendRequestPayload'](arg1);
+}
+
+export function SetCurrentSheetName(arg1) {
+  return window['go']['main']['App']['SetCurrentSheetName'](arg1);
 }
 
 export function Sheets() {

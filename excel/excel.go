@@ -9,7 +9,7 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-var sheetName = "Sheet1"
+var sheetName = ""
 
 const (
 	logoWidth   float64 = 30
@@ -37,9 +37,12 @@ func (e *Excel) Load(filename string) {
 	if err != nil {
 		panic(err)
 	}
+	f.GetDefinedName()
 	e.file = f
 
-	sheetName = e.file.GetSheetList()[0]
+	if sheetName == "" {
+		sheetName = e.file.GetSheetList()[0]
+	}
 
 }
 
@@ -178,7 +181,7 @@ func (e *Excel) CurrentSheet() string {
 	return sheetName
 }
 
-func SetSheetName(name string) {
+func (e *Excel) SetCurrentSheetName(name string) {
 	sheetName = name
 }
 

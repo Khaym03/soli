@@ -12,12 +12,12 @@ import {
 } from './ui/form'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import { ListRestartIcon, Plus, SaveIcon, Trash2 } from 'lucide-react'
+import { ListRestartIcon, Plus, SaveIcon, Table, Trash2 } from 'lucide-react'
 import { Textarea } from './ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { ContactInfo } from './contact-info'
 import { RequestOptions } from './request-option'
-import { SendRequestPayload } from 'wailsjs/go/main/App'
+import { OpenExcelFile, SendRequestPayload } from 'wailsjs/go/main/App'
 import { excel } from 'wailsjs/go/models'
 
 // type RequestRow = {
@@ -125,10 +125,10 @@ export function MaterialsRequestForm() {
               {/* opciones */}
               <RequestOptions control={form.control} checkboxes={checkboxes} />
 
-              <Input type='file' onChange={(e) => {
+              {/* <Input type='file' onChange={(e) => {
                 if (!e.target.files) return
                 console.log(e.target.files[0])
-              }} />
+              }} /> */}
             </CardContent>
           </Card>
 
@@ -138,6 +138,15 @@ export function MaterialsRequestForm() {
             <div className="flex justify-between items-center border-b pb-4 mb-4">
               <h3 className="text-lg font-semibold">Objetos</h3>
               <div className="flex gap-2">
+                <Button
+                  onClick={OpenExcelFile}
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                >
+                  <Table className="w-4 h-4 mr-1" />
+                  Abrir excel
+                </Button>
                 <Button
                   type="button"
                   variant="outline"
