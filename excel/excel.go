@@ -39,6 +39,8 @@ func (e *Excel) Load(filename string) {
 	}
 	e.file = f
 
+	sheetName = e.file.GetSheetList()[0]
+
 }
 
 func (e *Excel) SaveRequest(rfp RequestFormPayload) {
@@ -163,6 +165,17 @@ func (e *Excel) File() *excelize.File {
 
 func (e *Excel) NewFile() {
 	e.file = excelize.NewFile()
+}
+
+func (e *Excel) Sheets() []string {
+	e.Load("test.xlsx")
+	sheets := e.file.GetSheetList()
+
+	return sheets
+}
+
+func (e *Excel) CurrentSheet() string {
+	return sheetName
 }
 
 func SetSheetName(name string) {

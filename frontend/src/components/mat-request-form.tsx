@@ -14,7 +14,7 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { ListRestartIcon, Plus, SaveIcon, Trash2 } from 'lucide-react'
 import { Textarea } from './ui/textarea'
-import { Card } from './ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { ContactInfo } from './contact-info'
 import { RequestOptions } from './request-option'
 import { SendRequestPayload } from 'wailsjs/go/main/App'
@@ -113,13 +113,18 @@ export function MaterialsRequestForm() {
         className="flex flex-row gap-8 w-full max-w-screen-xl  overflow-hidden"
       >
         <div className="flex flex-col gap-8 grow">
-          <Card className="flex gap-4 p-6 shadow-none">
-            <div className="flex flex-col gap-4 grow">
-              <ContactInfo control={form.control} />
-            </div>
+          <Card className=" gap-4  shadow-none">
+            <CardHeader>
+              <CardTitle>Solicitud de materiales</CardTitle>{' '}
+            </CardHeader>
+            <CardContent className="flex  gap-4">
+              <div className="flex flex-col gap-4 grow">
+                <ContactInfo control={form.control} />
+              </div>
 
-            {/* opciones */}
-            <RequestOptions control={form.control} checkboxes={checkboxes} />
+              {/* opciones */}
+              <RequestOptions control={form.control} checkboxes={checkboxes} />
+            </CardContent>
           </Card>
 
           {/* second col  */}
@@ -150,7 +155,7 @@ export function MaterialsRequestForm() {
                   Reiniciar formulario
                 </Button>
 
-                <Button  size="sm" type="submit">
+                <Button size="sm" type="submit">
                   <SaveIcon className="w-4 h-4 mr-1" />
                   Guardar
                 </Button>
