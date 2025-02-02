@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 
+	"github.com/khaym03/soli/repository"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -12,11 +13,20 @@ import (
 var assets embed.FS
 
 func main() {
+
+	dbConn, err := setupDB()
+	if err != nil {
+		panic(err)
+	}
+
+	defer dbConn.Close()
+
+	queries := repository.New(dbConn)
 	// Create an instance of the app structure
-	app := NewApp()
+	app := NewApp(queries)
 
 	// Create application with options
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:  "soli",
 		Width:  1024,
 		Height: 768,

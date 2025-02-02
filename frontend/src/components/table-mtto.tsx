@@ -15,9 +15,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { columns } from './maintenance-cols'
-import { MaintenanceLogFormValues } from '@/lib/schema-maintenance'
-import { maintenanceLogs } from '@/lib/data'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from './ui/button'
 import { Pagination, PaginationContent, PaginationItem } from './ui/pagination'
 import {
@@ -26,6 +24,9 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react'
+import { useMaintenanceLogs } from '@/lib/maintenance'
+import MaintenanceLogDialog from './maintenance-log-dialog'
+import { useMaintenanceCtx } from './maintenance-ctx'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -50,6 +51,8 @@ export function DataTable<TData, TValue>({
       pagination // Pass the current pagination state
     }
   })
+
+  const { selectedLog, setSelectedLog } = useMaintenanceCtx()
 
   return (
     <div>
@@ -192,27 +195,17 @@ export function DataTable<TData, TValue>({
           </Pagination>
         </div>
       </div>
+      <MaintenanceLogDialog selectedLog={selectedLog} onClose={() => setSelectedLog(null)} />
     </div>
   )
 }
 
-async function getData(): Promise<MaintenanceLogFormValues[]> {
-  // Fetch data from your API here.
-  return maintenanceLogs
-}
-
-export default function DemoPage() {
-  const [data, setData] = useState<MaintenanceLogFormValues[]>([])
-
-  useEffect(() => {
-    getData().then(data => {
-      setData(data)
-    })
-  }, [])
+export default function MaintenanceTable() {
+  const { maintenanceLogs } = useMaintenanceLogs()
 
   return (
     <div className="">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={maintenanceLogs} />
     </div>
   )
 }

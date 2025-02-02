@@ -1,6 +1,3 @@
-'use client'
-
-import { MaintenanceLogFormValues } from '@/lib/schema-maintenance'
 import { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import {
@@ -13,8 +10,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
 import { Button } from './ui/button'
+import { useMaintenanceCtx } from './maintenance-ctx'
+import { repository } from 'wailsjs/go/models'
+import { DeleteMaintenanceLog } from 'wailsjs/go/main/App'
 
-export const columns: ColumnDef<MaintenanceLogFormValues>[] = [
+export const columns: ColumnDef<repository.MaintenanceLog>[] = [
   {
     accessorKey: 'maintenance_number',
     header: 'Mantenimiento#'
@@ -38,7 +38,16 @@ export const columns: ColumnDef<MaintenanceLogFormValues>[] = [
     id: 'actions',
     header: 'Acciones',
     cell: ({ row }) => {
-      const log = row.original
+      const { setSelectedLog } = useMaintenanceCtx()
+
+      const viewLogDetails = () => {
+        setSelectedLog(repository.MaintenanceLog.createFrom(row.original))
+      }
+
+      const deleteLog = () => {
+        DeleteMaintenanceLog(row.original.id)
+        setSelectedLog(null)
+      }
 
       return (
         <DropdownMenu>
@@ -51,13 +60,15 @@ export const columns: ColumnDef<MaintenanceLogFormValues>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(log.maintenance_number)}
+              onClick={deleteLog}
+              
             >
-              Copy payment ID
+              Eliminar registro
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem onClick={viewLogDetails}>
+              Ver detalles
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

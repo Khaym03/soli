@@ -25,6 +25,8 @@ import {
   maintenanceLogSchema,
   type MaintenanceLogFormValues
 } from '@/lib/schema-maintenance'
+import { CreateMaintenanceLog } from 'wailsjs/go/main/App'
+import { repository } from 'wailsjs/go/models'
 
 export function MaintenanceForm() {
   const form = useForm<MaintenanceLogFormValues>({
@@ -44,7 +46,24 @@ export function MaintenanceForm() {
   async function onSubmit(data: MaintenanceLogFormValues) {
     try {
       // Here you would typically send the data to your backend
+      
       console.log(data)
+    
+
+      const payload = new repository.CreateMaintenanceLogParams()
+      // for some reason this is not working so i'll do it manually
+      payload.emitter = data.emitter
+      payload.date_of_maintenance = new Date(data.date_of_maintenance)
+      payload.result =data.result
+      payload.observations = data.observations
+      payload.used_materials = data.used_materials
+      payload.maintenance_technician = data.maintenance_technician
+      payload.fault_description = data.fault_description
+      payload.issuing_department = data.issuing_department
+      payload.maintenance_number = data.maintenance_number
+      console.log(payload)
+
+      CreateMaintenanceLog(payload)
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
       form.reset()

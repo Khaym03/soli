@@ -5,7 +5,8 @@ import { MaintenanceForm } from './maintenance-form'
 import { MaterialsRequestForm } from './mat-request-form'
 // import { MaintenanceTable } from './maintenance-table'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import DemoPage from './table-mtto'
+import MaintenanceTable from './table-mtto'
+import MaintenanceCtxProvider from './maintenance-ctx'
 
 export default function RootLayout() {
   return (
@@ -45,23 +46,23 @@ export default function RootLayout() {
         </div>
       </TabsContent>
       <TabsContent value="tab-2">
-        <div className="h-full bg-muted/40 px-8">
-          <div className="grid grid-cols-1  gap-4 ">
-            <Card className="h-[calc(100vh-100px)] w-full mx-auto shadow-none overflow-y-auto">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-center">
-                 Registro de Mantenimiento
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4 ">
-                <MaintenanceForm />
-
-                {/* <MaintenanceTable /> */}
-                <DemoPage />
-              </CardContent>
-            </Card>
+        <MaintenanceCtxProvider>
+          <div className="h-full bg-muted/40 px-8">
+            <div className="grid grid-cols-1  gap-4 ">
+              <Card className="h-[calc(100vh-100px)] w-full mx-auto shadow-none overflow-y-auto">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold text-center">
+                    Registro de Mantenimiento
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4 ">
+                  <MaintenanceForm />
+                  <MaintenanceTable />
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
+        </MaintenanceCtxProvider>
       </TabsContent>
       {/* <TabsContent value="tab-3">
         <p className="p-4 pt-1 text-center text-xs text-muted-foreground">
