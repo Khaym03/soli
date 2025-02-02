@@ -1,11 +1,17 @@
-# README
+# Soli
+
+**Soli** es un proyecto desarrollado para el departamento de informática de la Universidad UPSM. Este proyecto tiene como objetivo llevar los registros de los mantenimientos de equipos y computarizar el proceso de solicitud de materiales.
+
+## Tecnologías
+
+- Go
+- React
+- Typescript
+- Wails
 
 ## About
 
-This is the official Wails React-TS template.
-
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+referecias aca: https://wails.io/docs/reference/project-config
 
 ## Live Development
 
