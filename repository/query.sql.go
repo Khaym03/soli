@@ -151,6 +151,18 @@ func (q *Queries) GetMaintenanceLogs(ctx context.Context) ([]MaintenanceLog, err
 	return items, nil
 }
 
+const getSerialvValue = `-- name: GetSerialvValue :one
+SELECT value FROM serial
+WHERE id = 1
+`
+
+func (q *Queries) GetSerialvValue(ctx context.Context) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getSerialvValue)
+	var value int64
+	err := row.Scan(&value)
+	return value, err
+}
+
 const updateMaintenanceLog = `-- name: UpdateMaintenanceLog :exec
 UPDATE maintenance_log
 SET created_at = ?,
@@ -197,5 +209,15 @@ func (q *Queries) UpdateMaintenanceLog(ctx context.Context, arg UpdateMaintenanc
 		arg.Observations,
 		arg.ID,
 	)
+	return err
+}
+
+const updateSerial = `-- name: UpdateSerial :exec
+UPDATE serial
+SET value = ?
+`
+
+func (q *Queries) UpdateSerial(ctx context.Context, value int64) error {
+	_, err := q.db.ExecContext(ctx, updateSerial, value)
 	return err
 }

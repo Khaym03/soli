@@ -18,6 +18,10 @@ export function GetMaintenanceLogs() {
   return window['go']['main']['App']['GetMaintenanceLogs']();
 }
 
+export function GetSerialValue() {
+  return window['go']['main']['App']['GetSerialValue']();
+}
+
 export function SendRequestPayload(arg1) {
   return window['go']['main']['App']['SendRequestPayload'](arg1);
 }

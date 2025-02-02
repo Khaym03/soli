@@ -12,3 +12,8 @@ CREATE TABLE IF NOT EXISTS maintenance_log (
     result TEXT,
     observations TEXT
 );
+
+CREATE TABLE IF NOT EXISTS serial (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    value INTEGER NOT NULL DEFAULT 0
+);

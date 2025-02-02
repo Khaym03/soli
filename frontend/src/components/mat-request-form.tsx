@@ -124,6 +124,11 @@ export function MaterialsRequestForm() {
 
               {/* opciones */}
               <RequestOptions control={form.control} checkboxes={checkboxes} />
+
+              <Input type='file' onChange={(e) => {
+                if (!e.target.files) return
+                console.log(e.target.files[0])
+              }} />
             </CardContent>
           </Card>
 

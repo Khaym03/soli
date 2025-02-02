@@ -11,6 +11,8 @@ export function DeleteMaintenanceLog(arg1:number):Promise<void>;
 
 export function GetMaintenanceLogs():Promise<Array<repository.MaintenanceLog>>;
 
+export function GetSerialValue():Promise<number>;
+
 export function SendRequestPayload(arg1:excel.RequestFormPayload):Promise<void>;
 
 export function Sheets():Promise<Array<string>>;

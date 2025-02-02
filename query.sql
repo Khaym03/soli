@@ -46,3 +46,11 @@ WHERE id = ?;
 -- name: DeleteMaintenanceLog :exec
 DELETE FROM maintenance_log
 WHERE id = ?;
+
+-- name: GetSerialvValue :one
+SELECT value FROM serial
+WHERE id = 1;
+
+-- name: UpdateSerial :exec
+UPDATE serial
+SET value = ?;

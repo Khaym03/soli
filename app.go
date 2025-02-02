@@ -64,6 +64,8 @@ func (a *App) CreateMaintenanceLog(params repository.CreateMaintenanceLogParams)
 		return repository.MaintenanceLog{}
 	}
 
+	a.queries.UpdateSerial(context.Background(), a.GetSerialValue()+1)
+
 	runtime.EventsEmit(a.ctx, EventUpdateMaintenanceTable)
 
 	return maintenanceLog
@@ -76,4 +78,13 @@ func (a *App) DeleteMaintenanceLog(id int64) {
 	}
 
 	runtime.EventsEmit(a.ctx, EventUpdateMaintenanceTable)
+}
+
+func (a *App) GetSerialValue() int64 {
+	value, err := a.queries.GetSerialvValue(context.Background())
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+	return value
 }

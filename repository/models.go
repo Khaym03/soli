@@ -22,3 +22,8 @@ type MaintenanceLog struct {
 	Result                *string    `json:"result"`
 	Observations          *string    `json:"observations"`
 }
+
+type Serial struct {
+	ID    int64 `json:"id"`
+	Value int64 `json:"value"`
+}

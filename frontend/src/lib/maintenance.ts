@@ -8,12 +8,16 @@ export function useMaintenanceLogs() {
     repository.MaintenanceLog[]
   >([])
 
-  useEffect(() => {
-    const request = async () => {
-      const maintenanceLogs = await GetMaintenanceLogs()
-      setMaintenanceLogs(maintenanceLogs ?? [])
-    }
+  const request = async () => {
+    const maintenanceLogs = await GetMaintenanceLogs()
+    setMaintenanceLogs(maintenanceLogs ?? [])
+  }
 
+  useEffect(() => {
+    request()
+  }, [])
+
+  useEffect(() => {
    EventsOn('update_maintenance_table', () => {
       request()
     })
@@ -21,8 +25,8 @@ export function useMaintenanceLogs() {
     return () => {
       EventsOff('update_maintenance_table')
     }
-    // request()
   }, [])
+
 
   return { maintenanceLogs }
 }
