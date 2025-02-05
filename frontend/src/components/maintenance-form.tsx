@@ -28,10 +28,11 @@ import {
 import { CreateMaintenanceLog } from 'wailsjs/go/main/App'
 import { repository } from 'wailsjs/go/models'
 import { useSerealizer } from '@/lib/serializer'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function MaintenanceForm() {
   const { serial } = useSerealizer()
+  const [forceUpdate, setForceUpdate] = useState(false)
   const form = useForm<MaintenanceLogFormValues>({
     resolver: zodResolver(maintenanceLogSchema),
     defaultValues: {
@@ -47,8 +48,8 @@ export function MaintenanceForm() {
   })
 
   useEffect(() => {
-    form.setValue('maintenance_number', serial);
-  }, [serial]);
+    form.setValue('maintenance_number', serial)
+  }, [serial, forceUpdate])
 
   async function onSubmit(data: MaintenanceLogFormValues) {
     try {
@@ -69,10 +70,13 @@ export function MaintenanceForm() {
       payload.maintenance_number = serial
       console.log(payload)
 
-      CreateMaintenanceLog(payload)
+      await CreateMaintenanceLog(payload)
+      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500))
+
       form.reset()
+      setForceUpdate(prev => !prev)
     } catch (error) {
       console.error('Error submitting form:', error)
     }
@@ -97,7 +101,7 @@ export function MaintenanceForm() {
                   <FormLabel>No. Mantenimiento</FormLabel>
                   <FormControl>
                     <Input
-                    disabled
+                      disabled
                       placeholder="Ingrese el número de mantenimiento"
                       {...field}
                     />
